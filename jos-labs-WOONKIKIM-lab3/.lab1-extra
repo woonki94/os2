@@ -1,0 +1,73 @@
+//Type command "show" to see the colored text in console.
+
+
+/*
+1.Declare function in monitor.h
+    ```
+    int show(int argc, char **argv, struct Trapframe *tf);
+    ```
+
+2.Implement function in monitor.c
+
+    ```
+    int 
+    show(int argc, char **argv, struct Trapframe *tf)
+    {
+        static const char * CSI = "\33[";
+        cprintf("%s%s", CSI, "31m");
+        cprintf("RED\n");
+        cprintf("%s%s", CSI, "34m");
+        cprintf("BLUE\n");
+        cprintf("%s%s", CSI, "35m");
+        cprintf("PURPLE\n");
+        cprintf("%s%s", CSI, "33m");
+        cprintf("YELLOW\n");
+        cprintf("%s%s", CSI, "38;2;255;165;0m");
+        cprintf("ORANGE\n");
+        cprintf("%s%s", CSI, "0m");    
+        return 0;
+    }
+    ```
+
+3. Add command
+    ```
+    // LAB 1: add your command to here...
+    static struct Command commands[] = {
+        { "help", "Display this list of commands", mon_help },
+        { "kerninfo", "Display information about the kernel", mon_kerninfo },
+        { "backtrace", "Display stack backtrace", mon_backtrace },
+        { "show", "Display colored text", show },
+    };
+    ```
+
+4. Call show function at init.c to show the output in initial console.(not necessary)
+
+    ```
+    void
+    i386_init(void)
+    {
+        extern char edata[], end[];
+
+        // Before doing anything else, complete the ELF loading process.
+        // Clear the uninitialized global data (BSS) section of our program.
+        // This ensures that all static/global variables start out zero.
+        memset(edata, 0, end - edata);
+
+        // Initialize the console.
+        // Can't call cprintf until after we do this!
+        cons_init();
+
+        cprintf("444544 decimal is %o octal!\n", 444544);
+        //int x = 1, y = 3, z = 4;
+        //cprintf("x %d, y %x, z %d\n", x, y, z);
+        cprintf("x=%d y=%d\n", 3);
+        // Test the stack backtrace function (lab 1 only)
+        test_backtrace(5);
+        show(0,0,0);
+
+        // Drop into the kernel monitor.
+        while (1)
+            monitor(NULL);
+    }
+    ```
+*/

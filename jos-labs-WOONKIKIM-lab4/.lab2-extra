@@ -1,0 +1,24 @@
+showmapping usage:
+
+    showmapping [virtual_addr1] [virtual_addr2]
+    
+    ex)
+        showmapping 0xf0000000 0xf0004000
+
+
+changeperm usage:
+
+    changeperm [virtual_addr] [set/clear] [p|w|u]
+    
+    ex1) 
+        changeperm 0xf0004000 set pw
+    ex2) 
+        changeperm 0xf0004000 clear p
+
+
+memdump usage:
+
+    memdump [virtual_addr1] [virtual_addr2]
+
+    ex) 
+        memdump 0xf010000c 0xf0100020
